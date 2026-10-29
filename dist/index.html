@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!-- Permite escribir tildes y adapta la página al ancho del dispositivo. -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#285344">
+  <meta name="description" content="Cinco espacios para jugar, crear y aprender a tu ritmo.">
+  <title>JuegaLab · Aprende a tu ritmo</title>
+
+  <!-- CSS: diseño. JS: comportamiento. defer espera a que el HTML esté listo. -->
+  <link rel="stylesheet" href="styles.css">
+  <script src="app.js" defer></script>
+</head>
+<body>
+  <!-- Este enlace aparece al usar Tab y permite saltar la cabecera. -->
+  <a class="saltar" href="#juegos">Ir a los juegos</a>
+
+  <header class="cabecera contenedor">
+    <!-- PERSONALIZAR: cambia aquí el nombre del proyecto. -->
+    <a class="marca" href="#inicio" aria-label="JuegaLab, inicio">✳ Juega<span>Lab</span></a>
+    <nav class="navegacion" aria-label="Navegación principal">
+      <a class="enlace-juegos" href="#juegos">Explorar juegos</a>
+      <button id="boton-ayuda" type="button">Cómo jugar</button>
+      <button id="boton-pantalla" type="button" aria-label="Activar pantalla completa" aria-pressed="false">⛶</button>
+    </nav>
+  </header>
+
+  <main id="inicio" class="contenedor">
+    <!-- PRESENTACIÓN: edita estos textos sin tocar el JavaScript. -->
+    <section class="presentacion" aria-labelledby="titulo-principal">
+      <div>
+        <p class="etiqueta">UN ESPACIO PARA TODAS LAS MENTES</p>
+        <h1 id="titulo-principal">Un poco de juego.<br>Un mundo de <em>ideas.</em></h1>
+        <p class="introduccion">Crea, piensa y descubre algo nuevo.<br>Elige un juego y aprende a tu propio ritmo.</p>
+        <a class="boton principal" href="#juegos">Vamos a jugar <span aria-hidden="true">↘</span></a>
+        <ul class="ventajas" aria-label="Nuestra forma de jugar">
+          <li>✦ Sin prisas</li><li>♡ Para todos</li><li>↗ A tu ritmo</li>
+        </ul>
+      </div>
+      <!-- Decoración sin imágenes externas: funciona también sin internet. -->
+      <div class="decoracion" aria-hidden="true">
+        <span class="burbuja">¡La curiosidad se juega!</span>
+        <div class="pieza morada">a</div><div class="pieza amarilla">2<span>+</span></div>
+        <div class="pieza verde">✿</div><div class="pieza rosa">☺</div>
+        <span class="estrella">✳</span><i>hecho para explorar ↗</i>
+      </div>
+    </section>
+
+    <!-- Las cinco tarjetas se crean con la lista JUEGOS de app.js. -->
+    <section id="juegos" aria-labelledby="titulo-juegos">
+      <div class="encabezado-seccion">
+        <div><p class="etiqueta">ELIGE TU PRÓXIMA AVENTURA</p><h2 id="titulo-juegos">¿Qué te apetece hacer?</h2></div>
+        <p id="contador-juegos" class="estado"></p>
+      </div>
+      <div id="lista-juegos" class="lista-juegos"></div>
+      <noscript><p>Activa JavaScript en tu navegador para utilizar los juegos.</p></noscript>
+    </section>
+
+    <aside class="mensaje-amable">
+      <span aria-hidden="true">✺</span>
+      <div><strong>No hay una sola forma de aprender.</strong><p>Prueba, equivócate y vuelve a intentarlo. Aquí, lo importante es disfrutar.</p></div>
+    </aside>
+  </main>
+
+  <footer class="pie contenedor"><strong>✳ JuegaLab</strong><span>Un espacio para jugar, crear y aprender.</span><span>Hecho para tu curiosidad ✦</span></footer>
+
+  <!-- Una sola ventana para todos los juegos. Escape la cierra automáticamente. -->
+  <dialog id="ventana" aria-labelledby="titulo-ventana">
+    <div class="barra-ventana"><h2 id="titulo-ventana">JuegaLab</h2><button id="boton-cerrar" type="button" autofocus>Volver al inicio ✕</button></div>
+    <div id="contenido-ventana"></div>
+  </dialog>
+
+  <!-- PLANTILLA DE AYUDA: JavaScript copia este contenido dentro de la ventana. -->
+  <template id="plantilla-ayuda">
+    <div class="juego">
+      <h3>Jugar es así de sencillo</h3>
+      <ol class="instrucciones">
+        <li>Elige un juego que indique «Jugar ahora».</li>
+        <li>Para colorear, selecciona un color y toca una parte del dibujo.</li>
+        <li>Para sumar, elige tu nivel, escribe la respuesta y pulsa «Comprobar».</li>
+        <li>Puedes usar ratón, pantalla táctil o las teclas Tab y Enter.</li>
+        <li>Pulsa «Volver al inicio» o Escape para salir del juego.</li>
+      </ol>
+      <p>Juega sin límite de tiempo. Los tres juegos pendientes estarán disponibles cuando se definan.</p>
+    </div>
+  </template>
+
+  <!-- PLANTILLA DE COLOREAR: cada data-zona es una parte que se puede pintar.
+       Para cambiar el dibujo, conserva data-zona, aria-label y fill en cada pieza. -->
+  <template id="plantilla-colorear">
+    <div class="juego">
+      <h3>Dale color a tu mundo</h3><p>Elige un color y después toca una parte del paisaje.</p>
+      <div id="paleta" class="herramientas" role="group" aria-label="Colores disponibles"></div>
+      <p id="color-elegido" class="texto-pequeno"></p>
+      <svg id="dibujo" class="dibujo" viewBox="0 0 640 290" role="group" aria-label="Paisaje para colorear">
+        <!-- Fondo, sol y montañas. El orden también indica qué queda delante. -->
+        <path data-zona aria-label="Cielo" d="M2 2H638V288H2Z" fill="#eaf3fb"/>
+        <circle data-zona aria-label="Sol" cx="524" cy="61" r="36" fill="#fff3b5"/>
+        <path data-zona aria-label="Montaña izquierda" d="M20 225L175 37L326 225Z" fill="#e0d9f1"/>
+        <path data-zona aria-label="Montaña derecha" d="M262 225L403 65L550 225Z" fill="#d4e9dd"/>
+        <path data-zona aria-label="Pradera" d="M2 225Q150 173 320 228T638 209V288H2Z" fill="#c4dc9e"/>
+        <!-- Casa: pared, tejado, puerta y ventana. -->
+        <path data-zona aria-label="Casa" d="M217 171H368V277H217Z" fill="#fff1dd"/>
+        <path data-zona aria-label="Tejado" d="M196 175L291 103L389 175Z" fill="#e9b1a5"/>
+        <path data-zona aria-label="Puerta" d="M275 218H312V277H275Z" fill="#c8b8df"/>
+        <path data-zona aria-label="Ventana" d="M232 195H260V223H232Z" fill="#bde3ee"/>
+        <!-- Árbol. -->
+        <path data-zona aria-label="Tronco" d="M452 182H474V269H452Z" fill="#bfa080"/>
+        <path data-zona aria-label="Copa del árbol" d="M463 91C403 91 397 163 427 174C417 214 502 214 502 177C539 151 509 89 463 91Z" fill="#93bd91"/>
+      </svg>
+      <div class="herramientas">
+        <button id="boton-deshacer" type="button" disabled>↶ Deshacer</button>
+        <button id="boton-reiniciar-dibujo" type="button">↺ Reiniciar dibujo</button>
+        <button id="boton-descargar" type="button">↓ Guardar dibujo</button>
+      </div>
+      <p id="mensaje-color" class="respuesta" aria-live="polite">¡El paisaje es tuyo!</p>
+    </div>
+  </template>
+
+  <!-- PLANTILLA DE SUMAS: los niveles se rellenan desde NIVELES en app.js. -->
+  <template id="plantilla-sumas">
+    <div class="juego">
+      <h3>Suma y descubre</h3><p>Cada intento es una oportunidad para aprender.</p>
+      <div class="herramientas"><label for="nivel">Elige tu nivel</label><select id="nivel"></select></div>
+      <p id="puntuacion" class="estado" aria-live="polite">0 sumas resueltas</p>
+      <form id="formulario-sumas">
+        <p id="operacion" class="operacion"></p>
+        <label for="resultado">Tu respuesta</label>
+        <div class="herramientas">
+          <input id="resultado" class="campo-respuesta" type="number" inputmode="numeric" min="0" step="1" required autocomplete="off" aria-describedby="operacion mensaje-suma">
+          <button id="boton-comprobar" class="principal" type="submit">Comprobar →</button>
+        </div>
+      </form>
+      <p id="mensaje-suma" class="respuesta" aria-live="polite"></p>
+      <div class="herramientas"><button id="boton-pista" type="button">Necesito una pista</button><button id="boton-siguiente" class="principal" type="button" hidden>Siguiente suma →</button></div>
+      <p class="texto-pequeno">Al cambiar de nivel, el contador vuelve a cero.</p>
+    </div>
+  </template>
+</body>
+</html>
